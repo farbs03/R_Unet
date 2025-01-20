@@ -1,9 +1,10 @@
 import json
 import argparse
 
-class argrements():
+
+class Arguments:
     def __init__(self):
-        self.videopath = ''
+        self.data_path = ""
         self.step = ''
         self.epoch_num = ''
         self.output_path = ''
@@ -14,7 +15,7 @@ class argrements():
         self.loss_func = ''
         self.predict_frame = ''
         self.parseJSON()
-    
+
     def parseJSON(self):
         parser = argparse.ArgumentParser()
         parser.add_argument('JSON', type= str, help='display an integer')
@@ -23,7 +24,7 @@ class argrements():
         with open(args.JSON+".json") as json_file:
             try:
                 config = json.load(json_file)
-                self.videopath = config["videopath"]
+                self.data_path = config["data_path"]
                 self.output_path = config["output_path"]
                 self.step = config["step"]        
                 self.sz_idx = config["size_idx"]

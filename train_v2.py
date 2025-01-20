@@ -12,12 +12,12 @@ import datetime
 import time
 import psutil
 import gc
-#from torchviz import make_dot, make_dot_from_trace
-# possible size_index: 2^n, n >= 4, n is int 
+# from torchviz import make_dot, make_dot_from_trace
+# possible size_index: 2^n, n >= 4, n is int
 
 # set arguements
-'''
-video_path:        directory of video frames
+"""
+data_path:         directory of the input data
 learn_rate:        learning rate
 gray_scale_bol:    boolean, True for use gray scale image, False for use color image
 version:           runet version to use
@@ -29,15 +29,21 @@ skip_frame:        sample rate, to reduce compactness
 predict_frame_num: number of prections    
 Load:              True: load model from checkpoint; False: start from zero
 load_model_name:   checkpoint name to load and train 
-'''
+"""
 
-args = parse_argument.argrements()
-video_path, learn_rate, step, gray_scale_bol, version = args.videopath, float(args.lr), int(args.step), bool(args.gray_scale), args.version
+args = parse_argument.Arguments()
+data_path, learn_rate, step, gray_scale_bol, version = (
+    args.data_path,
+    float(args.lr),
+    int(args.step),
+    bool(args.gray_scale),
+    args.version,
+)
 output_path = args.output_path
 epoch_num = int(args.epoch_num)
 size_idx = int(args.sz_idx)
 loss_function = str(args.loss_func)
-#input_frame = int( args.input_frame )
+# input_frame = int( args.input_frame )
 skip_frame = int(args.skip_frame)
 predict_frame_num = int(args.predict_frame)
 
@@ -72,12 +78,12 @@ else:
 save_img = True
 
 # get lists of frame paths
-all_video_dir_list = get_video_dir_list(video_path)
+all_data_dir_list = get_data_dir_list(data_path)
 
-video_dir_list = all_video_dir_list[0:160]
-val_dir_list = all_video_dir_list[160:180]
+video_dir_list = all_data_dir_list[0:160]
+val_dir_list = all_data_dir_list[160:180]
 
-# ste gpu, set data, check gpu, define network, 
+# ste gpu, set data, check gpu, define network,
 gpus = [0]
 start_date = str(datetime.datetime.now())[0:10]
 cuda_gpu = torch.cuda.is_available()
@@ -97,7 +103,7 @@ train_video_num = len(video_dir_list) # batch size = number of avaliable video, 
 pytorch_total_params = sum(p.numel() for p in network.parameters())
 print("==========================")
 print("model version:", version)
-print("training/validation video path", video_path)
+print("training/validation video path", data_path)
 print("number of parameters:", pytorch_total_params)
 print("leaening rate:", learn_rate)
 print("frame size:", size_idx, 'x', size_idx)

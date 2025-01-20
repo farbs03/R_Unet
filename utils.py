@@ -22,35 +22,40 @@ def reshape(img, gray_scale_r=False, size_idx = 256):
     else:
         return np.reshape(img, (1, size_idx, size_idx))
 
+
 '''
 given a path, get all child directory from the path
 return sorted list
 '''
-def get_video_dir_list(video_path):
+def get_data_dir_list(data_path):
     cwd = os.getcwd()
-    os.chdir(cwd + video_path[1:])
+    os.chdir(cwd + data_path[1:])
     dir_list = next(os.walk('.'))[1]
-    video_dir_list = []
+    data_dir_list = []
     for i in dir_list:
-        i = video_path + str(i) + '/'
-        video_dir_list.append(i)
+        i = data_path + str(i) + "/"
+        data_dir_list.append(i)
     os.chdir(cwd)
-    video_dir_list.sort()
-    return video_dir_list
+    data_dir_list.sort()
+    return data_dir_list
 
-'''
-given a path, get all 'jpg' and 'png' image
+
+"""
+given a path, get all zarr files
 return sorted path
-'''
-def get_file_path(video_path):
+"""
+
+
+def get_file_path(data_path):
     frame_paths = []
-    for r, d, f in os.walk(video_path):
+    for r, d, f in os.walk(data_path):
         for file in f:
-            if ".jpg" or ".png" or ".pt"  in file:
-                filepath = video_path + file
+            if ".zarr" in file:
+                filepath = data_path + file
                 frame_paths.append(filepath)
     frame_paths.sort()
     return frame_paths
+
 
 '''
 load pics in batch
@@ -235,7 +240,7 @@ def write_csv_file( filename, data):
         for i in range(0, len(data)):
             writer = csv.writer(csvfile)
             writer.writerow(data[i])
-    
+
 def buf_update( latent_feature, buf, step ):
     if len(buf) < step-1:
         buf.append( latent_feature )
